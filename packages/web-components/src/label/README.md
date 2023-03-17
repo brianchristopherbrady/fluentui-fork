@@ -76,13 +76,16 @@ Creating a simple label element with an optional info icon and optional required
 
 ```ts
 `<template
-  ?disabled="${(attr: Label) => attr.disabled}"
-  ?required="${(attr: Label) => attr.required}"
+  id="${(attr: Label) => attr.id}"
+  disabled="${(attr: Label) => attr.disabled}"
+  required="${(attr: Label) => attr.required}"
   size="${(attr: Label) => attr.size}"
   weight="${(attr: Label) => attr.weight}"
-  id="${(attr: Label) => attr.id}">
+>
+  <slot name="start"></slot>
   <slot></slot>
   ${(attr: Label) => (attr.required ? html`<span aria-hidden="true" part="asterisk" class="asterisk">*</span>` : null)}
+  <slot name="end"></slot>
 </template>`;
 ```
 
