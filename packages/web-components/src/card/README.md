@@ -28,11 +28,11 @@ Fluent WC3 Card has feature parity with the Fluent UI React 9 Card implementatio
 
 ### **Variables**
 
-| Name                  | Description               | Type                                   |
-| --------------------- | ------------------------- | -------------------------------------- |
-| `AccordionExpandMode` | Expand mode for Accordion | `{ single: "single", multi: "multi" }` |
-| `AccordionExpandMode` | Expand mode for Accordion | `{ single: "single", multi: "multi" }` |
-| `AccordionExpandMode` | Expand mode for Accordion | `{ single: "single", multi: "multi" }` |
+| Name              | Description                | Type                                                                                                  |
+| ----------------- | -------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `cardControlSize` | Control sizes for the Card | `{ small: "small", medium: "medium", large: "large" }`                                                |
+| `cardAppearance`  | Appearances for the Card   | `{ filled: "filled", filledAlternative: "filled-alternative", outline: "outline", subtle: "subtle" }` |
+| `cardOrientation` | Orientations for the Card  | `{ horizontal: "horizontal", vertical: "vertical" }`                                                  |
 
 <br />
 
@@ -71,6 +71,8 @@ Fluent WC3 Card has feature parity with the Fluent UI React 9 Card implementatio
 | Fluent UI React 9 | Fluent Web Components 3 |
 | ----------------- | ----------------------- |
 | `<Card>`          | `<fluent-card>`         |
+| `<CardHeader>`    |                         |
+| `<CardFooter>`    |                         |
 
 <br />
 
