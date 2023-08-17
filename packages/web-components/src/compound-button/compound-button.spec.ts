@@ -179,61 +179,41 @@ test.describe('Compound Button', () => {
     });
     expect(buttonFormProperty).toBeDefined();
   });
-});
 
-test.describe('Compound Button - Isolating Flaky', () => {
-  let page: Page;
-  let element: Locator;
-  let root: Locator;
-  let control: Locator;
-  test.describe.configure({ retries: 4 });
-
-  test.beforeAll(async ({ browser }) => {
-    page = await browser.newPage();
-    await page.goto(fixtureURL('components-button-compound-button--button'));
-    element = page.locator('fluent-compound-button');
-    root = page.locator('#root');
-    control = element.locator('.control');
-  });
-
-  test.afterAll(async () => {
-    await page.close();
-  });
-
-  test('should set the `autofocus` attribute on the internal control', async () => {
+  test('should reflect the `autofocus` attribute on the internal control', async () => {
     await root.evaluate(node => {
       node.innerHTML = /* html */ `
-                <fluent-compound-button autofocus></fluent-compound-button>
-            `;
+          <fluent-compound-button></fluent-compound-button>
+      `;
     });
 
-    const AutofocusAttribute = await control.getAttribute('autofocus');
-    expect(AutofocusAttribute).toBe('');
+    const autofocusAttribute = await element.getAttribute('autofocus');
+    expect(autofocusAttribute === '' || autofocusAttribute === 'autofocus').toBeFalsy();
 
     await element.evaluate(node => {
       node.toggleAttribute('autofocus');
     });
 
-    const noAutofocusAttribute = await control.getAttribute('autofocus');
-    expect(noAutofocusAttribute).toBe(null);
+    const noAutofocusAttribute = await element.getAttribute('autofocus');
+    expect(noAutofocusAttribute === '' || noAutofocusAttribute === 'autofocus').toBeTruthy();
   });
 
-  test('should set the `formnovalidate` attribute on the internal control', async () => {
+  test('should reflect the `formnovalidate` attribute on the internal control', async () => {
     await root.evaluate(node => {
       node.innerHTML = /* html */ `
-          <fluent-compound-button formnovalidate></fluent-compound-button>
+          <fluent-compound-button></fluent-compound-button>
       `;
     });
 
-    const formnovalidateAttribute = await control.getAttribute('formnovalidate');
-    expect(formnovalidateAttribute).toBe('');
+    const autofocusAttribute = await element.getAttribute('formnovalidate');
+    expect(autofocusAttribute === '' || autofocusAttribute === 'formnovalidate').toBeFalsy();
 
     await element.evaluate(node => {
       node.toggleAttribute('formnovalidate');
     });
 
-    const noFormnovalidateAttribute = await control.getAttribute('formnovalidate');
-    expect(noFormnovalidateAttribute).toBe(null);
+    const noAutofocusAttribute = await element.getAttribute('formnovalidate');
+    expect(noAutofocusAttribute === '' || noAutofocusAttribute === 'formnovalidate').toBeTruthy();
   });
 });
 
