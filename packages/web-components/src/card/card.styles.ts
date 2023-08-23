@@ -1,6 +1,7 @@
 import { css } from '@microsoft/fast-element';
 import { display } from '@microsoft/fast-foundation';
 import {
+  borderRadiusMedium,
   colorNeutralBackground1,
   colorNeutralBackground1Hover,
   colorNeutralBackground1Pressed,
@@ -26,12 +27,10 @@ import {
   colorTransparentStrokeDisabled,
   colorTransparentStrokeInteractive,
   fontFamilyBase,
+  shadow4,
+  shadow8,
   spacingHorizontalL,
-  spacingHorizontalM,
-  spacingHorizontalS,
   spacingVerticalL,
-  spacingVerticalM,
-  spacingVerticalS,
   strokeWidthThin,
 } from '../theme/design-tokens.js';
 
@@ -42,134 +41,137 @@ export const styles = css`
   ${display('flex')}
 
   :host {
-    padding: ${spacingVerticalM} ${spacingHorizontalM};
     flex-direction: column;
     font-family: ${fontFamilyBase};
     background: ${colorNeutralBackground1};
     border: ${strokeWidthThin} solid ${colorTransparentStroke};
+    border-radius: ${borderRadiusMedium};
+    position: relative;
+    row-gap: ${spacingVerticalL};
+    column-gap: ${spacingHorizontalL};
+    max-width: 100%;
+    margin: auto;
+    overflow: hidden;
+    box-shadow: ${shadow4};
+    row-gap: var(--card--size, 12px);
+    column-gap: var(--card--size, 12px);
+    padding: var(--card--size, 12px);
+    box-sizing: border-box;
   }
-  :host([aria-checked='true']) {
+
+  :host([orientation='horizontal']) .actions {
+    grid-row-start: span 2;
+  }
+
+  :host([orientation='horizontal']) {
+    flex-direction: row;
+    height: fit-content;
+    align-items: center;
+  }
+
+  :host([orientation='horizontal'])::slotted([slot='end']) {
+    display: none;
+  }
+
+  :host([aria-disabled='true']) {
+    background: ${colorNeutralBackgroundDisabled};
+    border: ${strokeWidthThin} solid ${colorTransparentStrokeDisabled};
+    shadow: ${shadow4};
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  :host([interactive]) {
+    cursor: pointer;
+  }
+  :host([aria-selected='true']) {
     background: ${colorNeutralBackground1Selected};
     border: ${strokeWidthThin} solid ${colorTransparentStrokeInteractive};
     cursor: pointer;
   }
-  :host([aria-disabled='true']) {
-    background: ${colorNeutralBackgroundDisabled};
-    border: ${strokeWidthThin} solid ${colorTransparentStrokeDisabled};
-    cursor: not-allowed;
-  }
-  :host(:focus-visible) {
-    background: ${colorNeutralBackground1};
-    cursor: pointer;
-  }
-  :host([interactive]):hover {
-    background: ${colorNeutralBackground1Hover};
-    border: ${strokeWidthThin} solid ${colorTransparentStrokeInteractive};
-    cursor: pointer;
-  }
-  :host([interactive]):active {
+  :host([interactive]:active) {
     background: ${colorNeutralBackground1Pressed};
     border: ${strokeWidthThin} solid ${colorTransparentStrokeInteractive};
-    cursor: pointer;
+  }
+  :host([interactive]:hover:not([appearance='subtle'])) {
+    background: ${colorNeutralBackground1Hover};
+    border: ${strokeWidthThin} solid ${colorTransparentStrokeInteractive};
+    box-shadow: ${shadow8};
   }
 
   /** filled alternative appearance */
   :host([appearance='filled-alternative']) {
     background: ${colorNeutralBackground2};
   }
-  :host([appearance='filled-alternative']):focus-visible {
-    cursor: pointer;
-  }
-  :host([appearance='filled-alternative'][aria-checked='true']) {
-    background: ${colorNeutralBackground2Selected};
-    border: ${strokeWidthThin} solid ${colorTransparentStrokeInteractive};
-    cursor: pointer;
-  }
 
   /** filled alternative appearance - interactive */
-  :host([interactive][appearance='filled-alternative']):hover {
-    background: ${colorNeutralBackground2Hover};
+
+  :host([appearance='filled-alternative'][aria-selected='true']) {
+    background: ${colorNeutralBackground2Selected};
     border: ${strokeWidthThin} solid ${colorTransparentStrokeInteractive};
-    cursor: pointer;
   }
 
-  :host([interactive][appearance='filled-alternative']):active {
+  :host([interactive][appearance='filled-alternative']:hover) {
+    background: ${colorNeutralBackground2Hover};
+    border: ${strokeWidthThin} solid ${colorTransparentStrokeInteractive};
+  }
+
+  :host([interactive][appearance='filled-alternative']:active) {
     background: ${colorNeutralBackground2Pressed};
     border: ${strokeWidthThin} solid ${colorTransparentStrokeInteractive};
-    cursor: pointer;
   }
 
   /** outline appearance */
 
   :host([appearance='outline']) {
-    background: ${colorNeutralBackground2};
-  }
-  :host([appearance='outline']):focus-visible {
-    cursor: pointer;
-  }
-  :host([appearance='outline'][aria-checked='true']) {
-    background: ${colorTransparentBackgroundSelected};
+    background: ${colorTransparentBackground};
     border: ${strokeWidthThin} solid ${colorNeutralStroke1};
-    cursor: pointer;
   }
 
   /** outline appearance - interactive */
 
-  :host([interactive][appearance='outline']) {
-    background: ${colorTransparentBackground};
-    border: ${strokeWidthThin} solid ${colorNeutralStroke1};
-    cursor: pointer;
+  :host([appearance='outline'][aria-selected='true']) {
+    background: ${colorTransparentBackgroundSelected};
+    border: ${strokeWidthThin} solid ${colorNeutralStroke1Selected};
   }
 
-  :host([interactive][appearance='outline']):hover {
+  :host([interactive][appearance='outline']:hover) {
     background: ${colorTransparentBackgroundHover};
     border: ${strokeWidthThin} solid ${colorNeutralStroke1Hover};
-    cursor: pointer;
   }
 
-  :host([interactive][appearance='outline']):active {
+  :host([interactive][appearance='outline']:active) {
     background: ${colorTransparentBackgroundPressed};
     border: ${strokeWidthThin} solid ${colorNeutralStroke1Pressed};
-    cursor: pointer;
   }
 
   /** subtle appearance */
   :host([appearance='subtle']) {
     background: ${colorSubtleBackground};
     border: ${strokeWidthThin} solid ${colorTransparentStroke};
-  }
-
-  :host([appearance='subtle'][aria-checked='true']) {
-    background: ${colorSubtleBackgroundSelected};
-    border: ${strokeWidthThin} solid ${colorNeutralStroke1Selected};
+    box-shadow: none;
   }
 
   /** subtle  appearance - interactive */
 
-  :host([interactive][appearance='subtle']):hover {
-    background: ${colorSubtleBackgroundHover};
-    border: ${strokeWidthThin} solid ${colorNeutralStroke1Hover};
-    cursor: pointer;
+  :host([appearance='subtle'][aria-selected='true']) {
+    background: ${colorSubtleBackgroundSelected};
+    border: ${strokeWidthThin} solid ${colorNeutralStroke1Selected};
   }
 
-  :host([interactive][appearance='subtle']):active {
+  :host([interactive][appearance='subtle']:hover) {
+    background: ${colorSubtleBackgroundHover};
+    border: ${strokeWidthThin} solid ${colorTransparentStroke};
+  }
+
+  :host([interactive][appearance='subtle']:active) {
     background: ${colorSubtleBackgroundPressed};
-    border: ${strokeWidthThin} solid ${colorNeutralStroke1Pressed};
-    cursor: pointer;
+    border: ${strokeWidthThin} solid ${colorTransparentStroke};
   }
 
   :host([orientation='horizontal']) {
     flex-direction: row;
   }
-  :host([control-size='small']) {
-    padding: ${spacingVerticalS} ${spacingHorizontalS};
-  }
-  :host([control-size='large']) {
-    padding: ${spacingVerticalL} ${spacingHorizontalL};
-  }
-
-  :host([appearance='outline']) {
-  }
-  :host([appearance='subtle']) {
+  :host([orientation='horizontal']) .footer {
+    display: none;
   }
 `;

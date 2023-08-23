@@ -2,14 +2,14 @@ import { ElementViewTemplate, html } from '@microsoft/fast-element';
 import type { Card } from './card.js';
 
 /**
- * The template for the Fluent label web-component.
+ * The template for the Fluent Card web-component.
  * @public
  */
 export function cardTemplate<T extends Card>(): ElementViewTemplate<T> {
   return html<T>`
     <template
       orientation="${x => x.orientation}"
-      aria-checked="${x => x.checked}"
+      aria-selected="${x => x.selected}"
       aria-disabled="${x => x.disabled}"
       disabled="${x => x.disabled}"
       appearance="${x => x.appearance}"
@@ -17,12 +17,12 @@ export function cardTemplate<T extends Card>(): ElementViewTemplate<T> {
       ?interactive="${x => x.interactive}"
       @click="${(x, c) => x.clickHandler(c.event as MouseEvent)}"
       @keydown="${(x, c) => x.keydownHandler(c.event as KeyboardEvent)}"
-      tabindex="${x => (x.interactive ? 0 : -1)}}"
+      tabindex="${x => (x.interactive ? 0 : -1)}"
       role="group"
     >
-      <slot name="header"></slot>
+      <slot name="start"></slot>
       <slot></slot>
-      <slot name="footer"></slot>
+      <slot name="end"></slot>
     </template>
   `;
 }

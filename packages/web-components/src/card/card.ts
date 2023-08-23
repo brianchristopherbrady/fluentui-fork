@@ -1,7 +1,13 @@
-import { attr } from '@microsoft/fast-element';
-import { FASTCard } from '@microsoft/fast-foundation';
+import { ElementStyles, attr, css } from '@microsoft/fast-element';
+import { FASTCard, StartEndOptions } from '@microsoft/fast-foundation';
 import { keyEnter, keySpace } from '@microsoft/fast-web-utilities';
 import { CardAppearance, CardControlSize, CardOrientation } from './card.options.js';
+
+/**
+ * Card configuration options
+ * @public
+ */
+export type CardOptions = StartEndOptions<Card>;
 
 /**
  * @class Card component
@@ -10,6 +16,17 @@ import { CardAppearance, CardControlSize, CardOrientation } from './card.options
  * This class extends the FASTCard. a flexible content container
  */
 export class Card extends FASTCard {
+  public connectedCallback(): void {
+    super.connectedCallback();
+    this.updateComputedStylesheet();
+  }
+
+  private computedStylesheet?: ElementStyles;
+
+  public sizeChanged(prev: boolean | undefined, next: boolean): void {
+    this.updateComputedStylesheet();
+  }
+
   /**
    * @property orientation;
    * @default filled
@@ -47,13 +64,13 @@ export class Card extends FASTCard {
   public interactive: boolean = false;
 
   /**
-   * @property checked
+   * @property selected
    * @default false
    * @remarks
-   * Determines checked state of card
+   * Determines selected state of card
    */
   @attr({ mode: 'boolean' })
-  public checked: boolean = false;
+  public selected: boolean = false;
 
   /**
    * @property disabled
@@ -65,14 +82,48 @@ export class Card extends FASTCard {
   public disabled: boolean = false;
 
   /**
+   * Updates an internal stylesheet with calculated CSS custom properties.
+   *
+   * @internal
+   */
+  protected updateComputedStylesheet(): void {
+    // Determine the pixel value based on the controlSize attribute
+    let sizeValue;
+    switch (this.controlSize) {
+      case CardControlSize.small:
+        sizeValue = '8px';
+        break;
+      case CardControlSize.medium:
+        sizeValue = '12px';
+        break;
+      case CardControlSize.large:
+        sizeValue = '16px';
+        break;
+      default:
+        sizeValue = '12px';
+        break;
+    }
+
+    this.$fastController.removeStyles(this.computedStylesheet);
+    this.computedStylesheet = css`
+      :host {
+        --card--size: ${sizeValue};
+      }
+    `;
+
+    this.$fastController.addStyles(this.computedStylesheet);
+  }
+
+  /**
    * Handle the checked state of the Card when interactive
    *
    * @param e - the mouse event
    * @internal
    */
   public clickHandler(e: MouseEvent): boolean | void {
-    if (!this.disabled || this.interactive) {
-      this.checked = !this.checked;
+    if (!this.disabled && this.interactive) {
+      console.log(this.interactive);
+      this.selected = !this.selected;
     }
   }
 
@@ -89,8 +140,8 @@ export class Card extends FASTCard {
       case keyEnter:
       case keySpace: {
         e.preventDefault();
-        if (!this.disabled || this.interactive) {
-          this.checked = !this.checked;
+        if (!this.disabled && this.interactive) {
+          this.selected = !this.selected;
         }
         break;
       }

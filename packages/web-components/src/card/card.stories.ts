@@ -3,20 +3,115 @@ import type { Args, Meta } from '@storybook/html';
 import { renderComponent } from '../helpers.stories.js';
 import type { Card as FluentCard } from './card.js';
 import './define.js';
-import { CardAppearance, CardControlSize, CardOrientation } from './card.options.js';
+import { CardAppearance, CardControlSize } from './card.options.js';
 
 type CardStoryArgs = Args & FluentCard;
 type CardStoryMeta = Meta<CardStoryArgs>;
 
+const iconShare = html`<svg
+  fill="currentColor"
+  aria-hidden="true"
+  width="1em"
+  height="1em"
+  viewBox="0 0 20 20"
+  xmlns="http://www.w3.org/2000/svg"
+  slot="start"
+>
+  <path
+    d="m13.33 12.84 4.5-4.42.05-.07a.59.59 0 0 0-.05-.77l-4.5-4.42-.06-.05c-.36-.27-.9-.01-.9.47V5.7l-.22.01C8.6 6.01 6.5 8.26 6 12.35c-.06.53.54.85.93.5a9.64 9.64 0 0 1 4.45-2.38c.24-.06.5-.1.74-.12l.26-.02v2.17c.06.46.61.67.95.34Zm-1.1-6.12 1.15-.08V4.61L16.82 8l-3.44 3.39V9.23l-1.36.12c-1.7.19-3.32.87-4.83 2 .3-1.33.8-2.34 1.47-3.06a5.2 5.2 0 0 1 3.57-1.57ZM5.5 4A2.5 2.5 0 0 0 3 6.5v8A2.5 2.5 0 0 0 5.5 17h8a2.5 2.5 0 0 0 2.5-2.5v-1a.5.5 0 0 0-1 0v1c0 .83-.67 1.5-1.5 1.5h-8A1.5 1.5 0 0 1 4 14.5v-8C4 5.67 4.67 5 5.5 5h3a.5.5 0 0 0 0-1h-3Z"
+    fill="currentColor"
+  ></path>
+</svg>`;
+
+const iconReply = html`<svg
+  fill="currentColor"
+  aria-hidden="true"
+  width="1em"
+  height="1em"
+  viewBox="0 0 20 20"
+  xmlns="http://www.w3.org/2000/svg"
+  slot="start"
+>
+  <path
+    d="m3.7 9 3.4 3.39a.5.5 0 0 1-.64.76l-.07-.05-4.24-4.25a.5.5 0 0 1-.06-.63l.06-.07L6.39 3.9a.5.5 0 0 1 .76.64l-.05.07L3.7 8H10a7.5 7.5 0 0 1 7.5 7.26v.24a.5.5 0 0 1-1 0A6.5 6.5 0 0 0 10.23 9H3.7l3.4 3.39L3.7 9Z"
+    fill="currentColor"
+  ></path>
+</svg>`;
+
+const iconEllipsis = html` <svg
+  fill="currentColor"
+  aria-hidden="true"
+  width="20"
+  height="20"
+  viewBox="0 0 20 20"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M6.75 10a1.75 1.75 0 1 1-3.5 0 1.75 1.75 0 0 1 3.5 0Zm5 0a1.75 1.75 0 1 1-3.5 0 1.75 1.75 0 0 1 3.5 0ZM15 11.75a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5Z"
+    fill="currentColor"
+  ></path>
+</svg>`;
+
 const cardTemplate = html<CardStoryArgs>`
-  <div>
+  <style>
+    div.docs-story > div:first-child {
+      height: 32em;
+    }
+    .card-default-story {
+      width: 720px;
+    }
+    .image--full-width {
+      margin-left: calc(var(--card--size) * -1);
+      margin-right: calc(var(--card--size) * -1);
+    }
+  </style>
+  <div style="padding: 48px 24px;">
     <fluent-card
+      class="card-default-story"
       appearance="${x => x.appearance}"
-      orientation="${x => x.orientation}"
       control-size="${x => x.controlSize}"
       ?interactive="${x => x.interactive}"
+      ?disabled="${x => x.disabled}"
     >
-      Card Component
+      <fluent-card-header slot="start">
+        <fluent-image slot="image" shape="square" fit="contain">
+          <img
+            alt="card header example image"
+            src="https://raw.githubusercontent.com/microsoft/fluentui/master/packages/react-components/react-card/stories/assets/avatar_elvia.svg"
+          />
+        </fluent-image>
+        <fluent-text align="start" font="base" size="300" weight="bold" slot="header">
+          <span>Elvia Atkins</span>
+          <fluent-text align="start" font="base" size="300" weight="regular" align="end">
+            <span>mentioned you</span>
+          </fluent-text>
+        </fluent-text>
+        <fluent-text block size="200" font="base" weight="regular" block slot="description">
+          <span>5h ago · About us - Overview</span>
+        </fluent-text>
+      </fluent-card-header>
+      <fluent-image class="image--full-width" shape="square" fit="contain">
+        <img
+          alt="card default slot example image"
+          src="https://raw.githubusercontent.com/microsoft/fluentui/master/packages/react-components/react-card/stories/assets/doc_template.png"
+        />
+      </fluent-image>
+      <fluent-card-footer slot="end">
+        <div>
+          <fluent-button ?disabled="${x => x.disabled}" size="medium" icon>${iconReply} Reply</fluent-button>
+          <fluent-button ?disabled="${x => x.disabled}" size="medium" icon>${iconShare} Share</fluent-button>
+        </div>
+        <fluent-button
+          slot="actions"
+          ?disabled="${x => x.disabled}"
+          size="small"
+          icon-only
+          appearance="transparent"
+          aria-label="actions example button"
+        >
+          ${iconEllipsis}
+        </fluent-button>
+      </fluent-card-footer>
     </fluent-card>
   </div>
 `;
@@ -25,7 +120,6 @@ export default {
   title: 'Components/Card',
   args: {
     appearance: CardAppearance.filled,
-    orientation: CardOrientation.vertical,
     controlSize: CardControlSize.medium,
     interactive: false,
   },
@@ -36,16 +130,21 @@ export default {
         type: 'select',
       },
     },
-    orientation: {
-      options: Object.values(CardOrientation),
-      control: {
-        type: 'select',
-      },
-    },
     controlSize: {
       options: Object.values(CardControlSize),
       control: {
         type: 'select',
+      },
+    },
+    disabled: {
+      control: 'boolean',
+      table: {
+        type: {
+          summary: 'Sets whether card is disbled or not',
+        },
+        defaultValue: {
+          summary: 'false',
+        },
       },
     },
     interactive: {
@@ -79,8 +178,90 @@ export const Card = renderComponent(cardTemplate).bind({});
 // Attribute Stories
 //
 
-export const Content = renderComponent(html<CardStoryArgs>`
-  <fluent-card>
-    <h2>Card</h2>
-  </fluent-card>
+export const Horizontal = renderComponent(html<CardStoryArgs>`
+  <div style="padding: 48px 24px;">
+    <fluent-card orientation="horizontal" style="width: 360px; height: 64px">
+      <fluent-image slot="start" shape="square" fit="contain" styles="width: 32px; height: 32px;">
+        <img
+          alt="card header example image"
+          src="https://raw.githubusercontent.com/microsoft/fluentui/master/packages/react-components/react-card/stories/assets/app_logo.svg"
+        />
+      </fluent-image>
+      <fluent-card-header>
+        <fluent-text align="start" font="base" size="300" weight="bold" slot="header">
+          <span>App Name</span>
+        </fluent-text>
+        <fluent-text block size="200" font="base" weight="regular" block slot="description">
+          <span>Developer</span>
+        </fluent-text>
+        <fluent-button
+          slot="actions"
+          ?disabled="${x => x.disabled}"
+          size="small"
+          icon-only
+          appearance="transparent"
+          aria-label="actions example button"
+        >
+          ${iconEllipsis}
+        </fluent-button>
+      </fluent-card-header>
+    </fluent-card>
+  </div>
 `);
+
+// <div slot="header">
+// <div class="header-content">
+//   <div class="image">
+//     <fluent-image
+//       slot="image"
+//       shape="square"
+//       fit="contain"
+//     >
+//       <img
+//         alt="card header example image"
+//         src="https://raw.githubusercontent.com/microsoft/fluentui/master/packages/react-components/react-card/stories/assets/avatar_elvia.svg"
+//       />
+//     </fluent-image>
+//   </div>
+//   <div class="title">
+//     <fluent-text align="start" font="base" size="300" weight="bold">
+//       <span style="margin-right: 5px;">Elvia Atkins</span>
+//       <fluent-text align="start" font="base" size="300" weight="regular" align="end">
+//         <span>mentioned you</span>
+//       </fluent-text>
+//     </fluent-text>
+//     <fluent-text block size="200" font="base" weight="regular" block>
+//       <span>5h ago · About us - Overview</span>
+//     </fluent-text>
+//   </div>
+// </div>
+// </div>
+// <div class="image--full-width">
+//   <fluent-image shape="square" fit="contain">
+//     <img
+//       alt="card default slot example image"
+//       src="https://raw.githubusercontent.com/microsoft/fluentui/master/packages/react-components/react-card/stories/assets/doc_template.png"
+//     />
+//   </fluent-image>
+// </div>
+// <div slot="preview" class="preview--full-width">
+//   <fluent-image shape="square" fit="center">
+//       <img
+//         alt="card default preview example image"
+//         src="https://raw.githubusercontent.com/microsoft/fluentui/master/packages/react-components/react-card/stories/assets/word_logo.svg"
+//       />
+//   </fluent-image>
+// </div>
+// <div slot="footer">
+// <div class="footer-content">
+// <div class="buttons-container">
+//   <fluent-button ?disabled="${x => x.disabled}" size="medium" icon>${iconReply} Reply</fluent-button>
+//   <fluent-button ?disabled="${x => x.disabled}" size="medium" icon>${iconShare} Share</fluent-button>
+// </div>
+// <div class="actions">
+//   <fluent-button ?disabled="${x => x.disabled}" size="small" icon-only appearance="transparent" aria-label="actions example button">
+//     ${iconEllipsis}
+//   </fluent-button>
+// </div>
+// </div>
+// </div>
