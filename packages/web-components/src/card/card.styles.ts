@@ -30,47 +30,38 @@ import {
   shadow4,
   shadow8,
   spacingHorizontalL,
+  spacingHorizontalM,
+  spacingHorizontalS,
   spacingVerticalL,
+  spacingVerticalM,
+  spacingVerticalS,
   strokeWidthThin,
 } from '../theme/design-tokens.js';
 
-/** Divider styles
+/** Card styles
  * @public
  */
 export const styles = css`
-  ${display('flex')}
+  ${display('grid')}
 
   :host {
-    flex-direction: column;
     font-family: ${fontFamilyBase};
     background: ${colorNeutralBackground1};
     border: ${strokeWidthThin} solid ${colorTransparentStroke};
     border-radius: ${borderRadiusMedium};
     position: relative;
-    row-gap: ${spacingVerticalL};
-    column-gap: ${spacingHorizontalL};
     max-width: 100%;
+    height: fit-content;
     margin: auto;
     overflow: hidden;
     box-shadow: ${shadow4};
-    row-gap: var(--card--size, 12px);
-    column-gap: var(--card--size, 12px);
-    padding: var(--card--size, 12px);
+    row-gap: ${spacingVerticalM};
+    column-gap: ${spacingHorizontalM};
+    padding: ${spacingVerticalM} ${spacingHorizontalM};
+    row-gap: 12px;
+    column-gap: 12px;
+    padding: 12px;
     box-sizing: border-box;
-  }
-
-  :host([orientation='horizontal']) .actions {
-    grid-row-start: span 2;
-  }
-
-  :host([orientation='horizontal']) {
-    flex-direction: row;
-    height: fit-content;
-    align-items: center;
-  }
-
-  :host([orientation='horizontal'])::slotted([slot='end']) {
-    display: none;
   }
 
   :host([aria-disabled='true']) {
@@ -80,12 +71,29 @@ export const styles = css`
     cursor: not-allowed;
     pointer-events: none;
   }
-  :host([interactive]) {
-    cursor: pointer;
-  }
   :host([aria-selected='true']) {
     background: ${colorNeutralBackground1Selected};
     border: ${strokeWidthThin} solid ${colorTransparentStrokeInteractive};
+    cursor: pointer;
+  }
+
+  :host([control-size='small']) {
+    row-gap: ${spacingVerticalS};
+    column-gap: ${spacingHorizontalS};
+    padding: ${spacingVerticalS} ${spacingHorizontalS};
+  }
+  :host([control-size='large']) {
+    row-gap: ${spacingVerticalL};
+    column-gap: ${spacingHorizontalL};
+    padding: ${spacingVerticalL} ${spacingHorizontalL};
+  }
+
+  :host([orientation='horizontal']) {
+    grid-template-rows: unset;
+    grid-template-columns: min-content 1fr;
+  }
+
+  :host([interactive]) {
     cursor: pointer;
   }
   :host([interactive]:active) {
@@ -98,80 +106,57 @@ export const styles = css`
     box-shadow: ${shadow8};
   }
 
-  /** filled alternative appearance */
   :host([appearance='filled-alternative']) {
     background: ${colorNeutralBackground2};
   }
-
-  /** filled alternative appearance - interactive */
 
   :host([appearance='filled-alternative'][aria-selected='true']) {
     background: ${colorNeutralBackground2Selected};
     border: ${strokeWidthThin} solid ${colorTransparentStrokeInteractive};
   }
-
   :host([interactive][appearance='filled-alternative']:hover) {
     background: ${colorNeutralBackground2Hover};
     border: ${strokeWidthThin} solid ${colorTransparentStrokeInteractive};
   }
-
   :host([interactive][appearance='filled-alternative']:active) {
     background: ${colorNeutralBackground2Pressed};
     border: ${strokeWidthThin} solid ${colorTransparentStrokeInteractive};
   }
-
-  /** outline appearance */
 
   :host([appearance='outline']) {
     background: ${colorTransparentBackground};
     border: ${strokeWidthThin} solid ${colorNeutralStroke1};
   }
 
-  /** outline appearance - interactive */
-
   :host([appearance='outline'][aria-selected='true']) {
     background: ${colorTransparentBackgroundSelected};
     border: ${strokeWidthThin} solid ${colorNeutralStroke1Selected};
   }
-
   :host([interactive][appearance='outline']:hover) {
     background: ${colorTransparentBackgroundHover};
     border: ${strokeWidthThin} solid ${colorNeutralStroke1Hover};
   }
-
   :host([interactive][appearance='outline']:active) {
     background: ${colorTransparentBackgroundPressed};
     border: ${strokeWidthThin} solid ${colorNeutralStroke1Pressed};
   }
 
-  /** subtle appearance */
   :host([appearance='subtle']) {
     background: ${colorSubtleBackground};
     border: ${strokeWidthThin} solid ${colorTransparentStroke};
     box-shadow: none;
   }
 
-  /** subtle  appearance - interactive */
-
   :host([appearance='subtle'][aria-selected='true']) {
     background: ${colorSubtleBackgroundSelected};
     border: ${strokeWidthThin} solid ${colorNeutralStroke1Selected};
   }
-
   :host([interactive][appearance='subtle']:hover) {
     background: ${colorSubtleBackgroundHover};
     border: ${strokeWidthThin} solid ${colorTransparentStroke};
   }
-
   :host([interactive][appearance='subtle']:active) {
     background: ${colorSubtleBackgroundPressed};
     border: ${strokeWidthThin} solid ${colorTransparentStroke};
-  }
-
-  :host([orientation='horizontal']) {
-    flex-direction: row;
-  }
-  :host([orientation='horizontal']) .footer {
-    display: none;
   }
 `;

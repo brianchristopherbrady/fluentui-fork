@@ -1,4 +1,4 @@
-import { ElementStyles, attr, css } from '@microsoft/fast-element';
+import { ElementStyles, attr, css, observable } from '@microsoft/fast-element';
 import { FASTCard, StartEndOptions } from '@microsoft/fast-foundation';
 import { keyEnter, keySpace } from '@microsoft/fast-web-utilities';
 import { CardAppearance, CardControlSize, CardOrientation } from './card.options.js';
@@ -18,6 +18,7 @@ export type CardOptions = StartEndOptions<Card>;
 export class Card extends FASTCard {
   public connectedCallback(): void {
     super.connectedCallback();
+    this.setFocusable();
     this.updateComputedStylesheet();
   }
 
@@ -55,11 +56,12 @@ export class Card extends FASTCard {
   public controlSize?: CardControlSize;
 
   /**
-   * @property selectable
+   * @property interactive
    * @default false
    * @remarks
    * Determines whether card is interactable
    */
+  @observable
   @attr({ mode: 'boolean' })
   public interactive: boolean = false;
 
@@ -69,6 +71,7 @@ export class Card extends FASTCard {
    * @remarks
    * Determines selected state of card
    */
+  @observable
   @attr({ mode: 'boolean' })
   public selected: boolean = false;
 
@@ -82,6 +85,38 @@ export class Card extends FASTCard {
   public disabled: boolean = false;
 
   /**
+   * @method selectedChanged
+   * @remarks
+   * Emits an event when the selected state of the card changes
+   */
+  public selectedChanged = (): void => {
+    this.$emit('onSelectionChanged', this.selected);
+  };
+
+  /**
+   * @method interactiveChanged
+   * @remarks
+   * Updates the focusable state of the card when the interactive state changes
+   */
+  public interactiveChanged = (): void => {
+    this.setFocusable();
+  };
+
+  /**
+   * @method setFocusable
+   * @remarks
+   * Sets the tabindex attribute based on the interactive state of the card
+   * @internal
+   */
+  public setFocusable(): void {
+    if (this.interactive) {
+      this.setAttribute('tabindex', '0');
+    } else {
+      this.removeAttribute('tabindex');
+    }
+  }
+
+  /**
    * Updates an internal stylesheet with calculated CSS custom properties.
    *
    * @internal
@@ -89,25 +124,32 @@ export class Card extends FASTCard {
   protected updateComputedStylesheet(): void {
     // Determine the pixel value based on the controlSize attribute
     let sizeValue;
+    let borderRadiusValue;
     switch (this.controlSize) {
       case CardControlSize.small:
         sizeValue = '8px';
+        borderRadiusValue = '2px';
         break;
       case CardControlSize.medium:
         sizeValue = '12px';
+        borderRadiusValue = '4px';
         break;
       case CardControlSize.large:
         sizeValue = '16px';
+        borderRadiusValue = '8px';
         break;
       default:
         sizeValue = '12px';
+        borderRadiusValue = '4px';
         break;
     }
 
     this.$fastController.removeStyles(this.computedStylesheet);
+
     this.computedStylesheet = css`
       :host {
         --card--size: ${sizeValue};
+        --card--border-radius: ${borderRadiusValue};
       }
     `;
 
@@ -122,7 +164,6 @@ export class Card extends FASTCard {
    */
   public clickHandler(e: MouseEvent): boolean | void {
     if (!this.disabled && this.interactive) {
-      console.log(this.interactive);
       this.selected = !this.selected;
     }
   }

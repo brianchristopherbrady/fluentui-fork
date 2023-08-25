@@ -8,17 +8,17 @@ import type { Card } from './card.js';
 export function cardTemplate<T extends Card>(): ElementViewTemplate<T> {
   return html<T>`
     <template
+      role="group"
       orientation="${x => x.orientation}"
-      aria-selected="${x => x.selected}"
-      aria-disabled="${x => x.disabled}"
       disabled="${x => x.disabled}"
       appearance="${x => x.appearance}"
       control-size="${x => x.controlSize}"
       ?interactive="${x => x.interactive}"
+      ?selected="${x => x.selected}"
+      aria-selected="${x => x.selected}"
+      aria-disabled="${x => x.disabled}"
       @click="${(x, c) => x.clickHandler(c.event as MouseEvent)}"
       @keydown="${(x, c) => x.keydownHandler(c.event as KeyboardEvent)}"
-      tabindex="${x => (x.interactive ? 0 : -1)}"
-      role="group"
     >
       <slot name="start"></slot>
       <slot></slot>
