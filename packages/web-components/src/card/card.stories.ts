@@ -102,7 +102,7 @@ const cardTemplate = html<CardStoryArgs>`
       <div slot="start">
         <div style="display: grid; column-gap: var(--card--size, 12px); grid-template-columns: min-content 1fr min-content; align-items: center;">
           <div style="width: 40px; height: 40px;">
-            <fluent-image shape="square" fit="contain" style="display: block">
+            <fluent-image shape="square" fit="contain" style="display: block;">
               <img alt="card header example image" src="https://picsum.photos/40/40" />
             </fluent-image>
           </div>
@@ -110,7 +110,7 @@ const cardTemplate = html<CardStoryArgs>`
             <fluent-text align="start" font="base" size="300" weight="bold" >
               <span>App Name</span>
             </fluent-text>
-            <fluent-text block size="200" font="base" weight="regular" block slot="description">
+            <fluent-text block size="200" font="base" weight="regular" block>
               <span>Developer</span>
             </fluent-text>
           </div>
@@ -149,6 +149,7 @@ export default {
     appearance: CardAppearance.filled,
     controlSize: CardControlSize.medium,
     interactive: false,
+    disabled: false,
   },
   argTypes: {
     appearance: {
@@ -193,6 +194,41 @@ export const Card = renderComponent(cardTemplate).bind({});
 //
 // Attribute Stories
 //
+
+export const floatingAction = renderComponent(html<CardStoryArgs>`
+  <div style="padding: 48px 24px;">
+    <fluent-card interactive orientation="horizontal" style="width: 360px;">
+      <div slot="start">
+        <div style="width: 40px; height: 40px;">
+          <fluent-image shape="square" fit="contain" style="display: block">
+            <img alt="card header example image" src="https://picsum.photos/40/40" />
+          </fluent-image>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr min-content;">
+        <div>
+          <fluent-text align="start" font="base" size="300" weight="bold">
+            <span>Teams offsite 2020</span>
+          </fluent-text>
+          <fluent-text block size="200" font="base" weight="regular" block slot="description">
+            <span>Onedrive > Files</span>
+          </fluent-text>
+        </div>
+        <div style="display: flex; align-items: center;">
+          <fluent-button
+            ?disabled="${x => x.disabled}"
+            size="small"
+            icon-only
+            appearance="transparent"
+            aria-label="actions example button"
+          >
+            ${iconEllipsis}
+          </fluent-button>
+        </div>
+      </div>
+    </fluent-card>
+  </div>
+`);
 
 export const ControlSize = renderComponent(html<CardStoryArgs>`
   <div class="flex gap-16 padding-24" style="height: fit-content;">

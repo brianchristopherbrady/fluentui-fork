@@ -66,6 +66,15 @@ export class Card extends FASTCard {
   public interactive: boolean = false;
 
   /**
+   * @property disabled
+   * @default false
+   * @remarks
+   * Determines disabled state of card
+   */
+  @attr({ mode: 'boolean' })
+  public disabled: boolean = false;
+
+  /**
    * @property selected
    * @default false
    * @remarks
